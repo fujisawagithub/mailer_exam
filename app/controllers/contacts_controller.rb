@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :set_contact, only: %i[ show edit update destroy ]
+  before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
   # GET /contacts or /contacts.json
   def index
@@ -22,15 +22,11 @@ class ContactsController < ApplicationController
   # POST /contacts or /contacts.json
   def create
     @contact = Contact.new(contact_params)
-
-    respond_to do |format|
-      if @contact.save
-        format.html { redirect_to @contact, notice: "Contact was successfully created." }
-        format.json { render :show, status: :created, location: @contact }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
-      end
+    if @contact.save
+      ContactMailer.contact_mail(@contact).deliver  ##追記
+      redirect_to contacts_path, notice: 'Contact was successfully created.'
+    else
+      render :new
     end
   end
 

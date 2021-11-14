@@ -41,6 +41,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rexml'#追記
+  gem 'letter_opener_web'
 end
 
 group :test do
